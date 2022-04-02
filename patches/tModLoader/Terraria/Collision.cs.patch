@@ -1,5 +1,13 @@
 --- src/TerrariaNetCore/Terraria/Collision.cs
 +++ src/tModLoader/Terraria/Collision.cs
+@@ -1550,6 +_,7 @@
+ 			Vector2 result = Velocity;
+ 			Vector2 vector = Velocity;
+ 			Vector2 vector2 = Position + Velocity;
++			vector2.X += 1;
+ 			Vector2 vector3 = Position;
+ 			int value = (int)(Position.X / 16f) - 1;
+ 			int value2 = (int)((Position.X + (float)Width) / 16f) + 2;
 @@ -2100,7 +_,7 @@
  			Vector2 vector2 = default(Vector2);
  			for (int i = num; i < num2; i++) {
