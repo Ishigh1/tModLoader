@@ -1,0 +1,50 @@
+--- src/TerrariaNetCore/Terraria/WorldBuilding/GenPass.cs
++++ src/tModLoader/Terraria/WorldBuilding/GenPass.cs
+@@ -1,4 +_,5 @@
+ using System;
++using System.Collections.Generic;
+ using Terraria.IO;
+ 
+ namespace Terraria.WorldBuilding
+@@ -7,32 +_,33 @@
+ 	{
+ 		public string Name;
+ 		public float Weight;
+-		private Action<GenPass> _onComplete;
++		private List<Action<GenPass>> _onComplete;
+-		private Action<GenPass> _onBegin;
++		private List<Action<GenPass>> _onBegin;
+ 
+ 		public GenPass(string name, float loadWeight) {
+ 			Name = name;
+ 			Weight = loadWeight;
++			_onBegin = new List<Action<GenPass>>();
++			_onComplete = new List<Action<GenPass>>();
+ 		}
+ 
+ 		protected abstract void ApplyPass(GenerationProgress progress, GameConfiguration configuration);
+ 
+ 		public void Apply(GenerationProgress progress, GameConfiguration configuration) {
+-			if (_onBegin != null)
+-				_onBegin(this);
++			_onBegin.ForEach(action => action(this));
+ 
+ 			ApplyPass(progress, configuration);
+-			if (_onComplete != null)
+-				_onComplete(this);
++
++			_onComplete.ForEach(action => action(this));
+ 		}
+ 
+ 		public GenPass OnBegin(Action<GenPass> beginAction) {
+-			_onBegin = beginAction;
++			_onBegin.Add(beginAction);
+ 			return this;
+ 		}
+ 
+ 		public GenPass OnComplete(Action<GenPass> completionAction) {
+-			_onComplete = completionAction;
++			_onComplete.Add(completionAction);
+ 			return this;
+ 		}
+ 	}
